@@ -21,4 +21,10 @@ public class Movie {
 
     @Column(name="TITLE")
     private String title;
+
+    private String director;
+    private String actors;
+    private String release;
+    private String description;
+    private String rating;
 }
