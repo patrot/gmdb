@@ -1,5 +1,6 @@
 package com.galvanize.indus.gmdb.controllers;
 
+import com.galvanize.indus.gmdb.exceptions.GmdbException;
 import com.galvanize.indus.gmdb.models.Movie;
 import com.galvanize.indus.gmdb.services.MoviesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class MoviesController {
@@ -22,7 +24,12 @@ public class MoviesController {
     }
 
     @GetMapping("/gmdb/movies/{title}")
-    public Movie getMovie(@PathVariable String title) {
-        return moviesService.findByTitle(title).get();
+    public Movie getMovie(@PathVariable String title) throws GmdbException {
+        Optional<Movie> movie = moviesService.findByTitle(title);
+        if (movie.isPresent()) {
+            return movie.get();
+        } else {
+            throw new GmdbException();
+        }
     }
 }

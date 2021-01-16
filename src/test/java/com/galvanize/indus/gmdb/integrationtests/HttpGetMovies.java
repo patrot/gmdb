@@ -1,5 +1,6 @@
 package com.galvanize.indus.gmdb.integrationtests;
 
+import com.galvanize.indus.gmdb.models.Movie;
 import com.galvanize.indus.gmdb.services.MoviesService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Optional;
+
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -42,5 +47,15 @@ public class HttpGetMovies {
                 .andDo(print())
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$.title").value("The Avengers"));
+    }
+
+    @Test
+    public void getMovieByTitleTest_whenMovieDoesNotExist() throws Exception {
+
+        mockMvc.perform(get("/gmdb/movies/Fantastic Four"))
+                .andExpect(status().isNotFound())
+                .andDo(print())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.message").value("Movie does not exist"));
     }
 }

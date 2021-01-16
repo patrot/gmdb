@@ -50,7 +50,7 @@ public class MoviesControllerTests {
     }
 
     @Test
-    public void GetMoviesTest_whenNoMoviesInDatabase() throws Exception {
+    public void getMoviesTest_whenNoMoviesInDatabase() throws Exception {
         when(mockMoviesService.findAll()).thenReturn(movies);
 
         mockMvc.perform(get("/gmdb/movies"))
@@ -63,7 +63,7 @@ public class MoviesControllerTests {
     }
 
     @Test
-    public void GetMoviesTest_whenMultipleMovies() throws Exception {
+    public void getMoviesTest_whenMultipleMovies() throws Exception {
 
         movies.add(avengers);
         movies.add(supermanReturns);
@@ -81,7 +81,7 @@ public class MoviesControllerTests {
     }
 
     @Test
-    public void GetMoviesTest_whenSingleMovie() throws Exception {
+    public void getMoviesTest_whenSingleMovie() throws Exception {
 
         movies.add(avengers);
         when(mockMoviesService.findAll()).thenReturn(movies);
@@ -102,7 +102,7 @@ public class MoviesControllerTests {
     }
 
     @Test
-    public void GetMovieByTitleTest_whenMovieExists() throws Exception {
+    public void getMovieByTitleTest_whenMovieExists() throws Exception {
 
         Optional<Movie> optionalMovie = Optional.of(avengers);
         when(mockMoviesService.findByTitle("The Avengers")).thenReturn(optionalMovie);
@@ -113,5 +113,20 @@ public class MoviesControllerTests {
                 .andExpect(jsonPath("$.title").value("The Avengers"));
 
         verify(mockMoviesService).findByTitle("The Avengers");
+    }
+
+    @Test
+    public void getMovieByTitleTest_whenMovieDoesNotExist() throws Exception {
+
+        Optional<Movie> optionalMovie = Optional.ofNullable(null);
+        when(mockMoviesService.findByTitle("Fantastic Four")).thenReturn(optionalMovie);
+
+        mockMvc.perform(get("/gmdb/movies/Fantastic Four"))
+                .andExpect(status().isNotFound())
+                .andDo(print())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.message").value("Movie does not exist"));
+
+        verify(mockMoviesService).findByTitle("Fantastic Four");
     }
 }
