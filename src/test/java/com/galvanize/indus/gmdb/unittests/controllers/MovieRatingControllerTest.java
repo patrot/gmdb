@@ -1,6 +1,9 @@
 package com.galvanize.indus.gmdb.unittests.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.galvanize.indus.gmdb.models.Movie;
+import com.galvanize.indus.gmdb.models.UserRating;
 import com.galvanize.indus.gmdb.services.MovieRatingService;
 import com.galvanize.indus.gmdb.services.MoviesService;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -37,9 +41,9 @@ public class MovieRatingControllerTest {
 
     @BeforeEach
     void setUp() {
-        List<Integer> userRatings = new ArrayList<Integer>();
-        userRatings.add(4);
-        userRatings.add(5);
+        List<UserRating> userRatings = new ArrayList<>();
+        userRatings.add(UserRating.builder().rating(4).review("Awful movie").build());
+        userRatings.add(UserRating.builder().rating(5).review("Worthwhile watching, run do not walk to see it").build());
         avengers = Movie.builder()
                 .title("The Avengers")
                 .director("Joss Whedon")
@@ -54,9 +58,20 @@ public class MovieRatingControllerTest {
     @Test
     public void submitMovieRatingTest() throws Exception {
 
-        when(movieRatingService.submitMovieRating("The Avengers", "4")).thenReturn(avengers);
+        when(movieRatingService.submitMovieRating("The Avengers", "4", "Worthwhile watching, run do not walk to see it")).thenReturn(avengers);
 
-        mockMvc.perform(post("/gmdb/movies/rating/The Avengers/4"))
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode contentObject = mapper.createObjectNode();
+        contentObject.put("review", "Worthwhile watching, run do not walk to see it");
+
+
+        // UserRating userRating = UserRating.builder().rating(4).review("Worthwhile watching, run do not walk to see it").build();
+        String content = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(contentObject);
+
+        mockMvc.perform(post("/gmdb/movies/rating/The Avengers/4")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding("utf-8")
+                    .content(content))
                 .andExpect(status().isCreated())
                 .andDo(print())
                 .andExpect(jsonPath("$").exists())
@@ -66,11 +81,13 @@ public class MovieRatingControllerTest {
                 .andExpect(jsonPath("$.release").value("2012"))
                 .andExpect(jsonPath("$.description").value("Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity."))
                 .andExpect(jsonPath("$.rating").value("4"))
-                .andExpect(jsonPath("$.userRatings[0]").value(4))
-                .andExpect(jsonPath("$.userRatings[1]").value(5));
+                .andExpect(jsonPath("$.userRatings[0].rating").value(4))
+                .andExpect(jsonPath("$.userRatings[0].review").value("Awful movie"))
+                .andExpect(jsonPath("$.userRatings[1].rating").value(5))
+                .andExpect(jsonPath("$.userRatings[1].review").value("Worthwhile watching, run do not walk to see it"));
 
 
-        verify(movieRatingService).submitMovieRating("The Avengers", "4");
+        verify(movieRatingService).submitMovieRating("The Avengers", "4", "Worthwhile watching, run do not walk to see it");
     }
 
 }

@@ -1,6 +1,7 @@
 package com.galvanize.indus.gmdb.unittests.services;
 
 import com.galvanize.indus.gmdb.models.Movie;
+import com.galvanize.indus.gmdb.models.UserRating;
 import com.galvanize.indus.gmdb.repositories.MoviesRepository;
 import com.galvanize.indus.gmdb.services.MovieRatingService;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,8 +25,8 @@ public class MovieRatingServiceTests {
     void setup(){
         mockMoviesRepository = mock(MoviesRepository.class);
         movieRatingService = new MovieRatingService(mockMoviesRepository);
-        List<Integer> userRatings = new ArrayList<Integer>();
-        userRatings.add(5);
+        List<UserRating> userRatings = new ArrayList<>();
+        userRatings.add(UserRating.builder().rating(5).build());
         expectedMovie = Movie.builder()
                 .title("The Avengers")
                 .director("Joss Whedon")
@@ -41,10 +42,11 @@ public class MovieRatingServiceTests {
         when(mockMoviesRepository.findByTitle("The Avengers")).thenReturn(java.util.Optional.ofNullable(expectedMovie));
 
         when(mockMoviesRepository.save(expectedMovie)).thenReturn(expectedMovie);
-        Movie movieResult = movieRatingService.submitMovieRating("The Avengers", "4");
+        Movie movieResult = movieRatingService.submitMovieRating("The Avengers", "4", "Poor Movie");
         assertEquals(expectedMovie.getTitle(), movieResult.getTitle());
         assertEquals(2, movieResult.getUserRatings().size());
-        assertEquals(4, movieResult.getUserRatings().get(movieResult.getUserRatings().size()-1));
+        assertEquals(4, movieResult.getUserRatings().get(movieResult.getUserRatings().size()-1).getRating());
+        assertEquals("Poor Movie", movieResult.getUserRatings().get(movieResult.getUserRatings().size()-1).getReview());
 
         verify(mockMoviesRepository).findByTitle("The Avengers");
         verify(mockMoviesRepository).save(expectedMovie);
@@ -55,10 +57,11 @@ public class MovieRatingServiceTests {
         when(mockMoviesRepository.findByTitle("The Avengers")).thenReturn(java.util.Optional.ofNullable(expectedMovie));
 
         when(mockMoviesRepository.save(expectedMovie)).thenReturn(expectedMovie);
-        Movie movieResult = movieRatingService.submitMovieRating("The Avengers", "3");
+        Movie movieResult = movieRatingService.submitMovieRating("The Avengers", "3", "Good movie");
         assertEquals(expectedMovie.getTitle(), movieResult.getTitle());
         assertEquals(2, movieResult.getUserRatings().size());
-        assertEquals(3, movieResult.getUserRatings().get(movieResult.getUserRatings().size()-1));
+        assertEquals(3, movieResult.getUserRatings().get(movieResult.getUserRatings().size()-1).getRating());
+        assertEquals("Good movie", movieResult.getUserRatings().get(movieResult.getUserRatings().size()-1).getReview());
         assertEquals("4", movieResult.getRating());
 
         verify(mockMoviesRepository).findByTitle("The Avengers");

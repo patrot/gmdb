@@ -32,8 +32,8 @@ public class Movie {
     @Column
     private String description;
 
-    @ElementCollection
-    private List<Integer> userRatings;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<UserRating> userRatings;
 
     private String rating;
 }
