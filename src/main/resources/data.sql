@@ -1,7 +1,7 @@
 
 INSERT INTO Movie (Title, Director, Actors, Release, Description)
 VALUES ('The Avengers', 'Joss Whedon', 'Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth', '2012'
-, 'Earths mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity'
+, 'Earth''s mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity'
 );
 
 INSERT INTO Movie (Title, Director, Actors, Release, Description)

@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name= "Movie")
+@Table(name= "Movie", uniqueConstraints = @UniqueConstraint(columnNames={"TITLE"}))
 public class Movie {
 
     @Id

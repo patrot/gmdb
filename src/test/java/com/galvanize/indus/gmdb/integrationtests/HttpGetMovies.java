@@ -34,4 +34,13 @@ public class HttpGetMovies {
                 .andExpect(jsonPath("$.[0].title").value("The Avengers"))
                 .andExpect(jsonPath("$.[1].title").value("Superman Returns"));
     }
+
+    @Test
+    public void getMovieByTitle() throws Exception {
+        mockMvc.perform(get("/gmdb/movies/The Avengers"))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.title").value("The Avengers"));
+    }
 }

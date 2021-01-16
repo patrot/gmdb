@@ -11,7 +11,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -56,6 +58,8 @@ public class MoviesControllerTests {
                 .andDo(print())
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$.length()").value(0));
+
+        verify(mockMoviesService).findAll();
     }
 
     @Test
@@ -72,6 +76,8 @@ public class MoviesControllerTests {
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$.[0].title").value("The Avengers"))
                 .andExpect(jsonPath("$.[1].title").value("Superman Returns"));
+
+        verify(mockMoviesService).findAll();
     }
 
     @Test
@@ -91,5 +97,21 @@ public class MoviesControllerTests {
                 .andExpect(jsonPath("$.[0].release").value("2012"))
                 .andExpect(jsonPath("$.[0].description").value("Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity."))
                 .andExpect(jsonPath("$.[0].rating").isEmpty());
+
+        verify(mockMoviesService).findAll();
+    }
+
+    @Test
+    public void GetMovieByTitleTest_whenMovieExists() throws Exception {
+
+        Optional<Movie> optionalMovie = Optional.of(avengers);
+        when(mockMoviesService.findByTitle("The Avengers")).thenReturn(optionalMovie);
+        mockMvc.perform(get("/gmdb/movies/The Avengers"))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.title").value("The Avengers"));
+
+        verify(mockMoviesService).findByTitle("The Avengers");
     }
 }
