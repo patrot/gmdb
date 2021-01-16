@@ -48,7 +48,7 @@ Response:
 }
 ````
 
-POST /gmdb/movies/rating/The Avengers/4
+POST /gmdb/movies/rating/The Avengers/3
 ````
 Response:
 {
@@ -58,7 +58,7 @@ Response:
     "release": "2012",
     "description": "Earths mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity",
     "rating": "4",
-    "userRatings": ["5", "4"],
+    "userRatings": ["5", "3"],
     "id": 1 
 }
 
