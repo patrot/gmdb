@@ -5,7 +5,7 @@
 |-----|--------|-------|-------------|
 |/gmdb/movies|GET|200|Get list of all movies with details|
 |/gmdb/movies/{title}|GET|200|Get movie based on its title|
-|/gmdb/movies/rating/{title}/{rating}|POST|201|Post rating for existing movie|
+|/gmdb/movies/rating/{title}|POST|201|Post rating for existing movie|
 
 ### **Sample Request and Response**
 
@@ -47,10 +47,11 @@ GET /gmdb/movies/The Avengers
 }
 ````
 
-POST /gmdb/movies/rating/The Avengers/3
+POST /gmdb/movies/rating/The Avengers
 ````
 Request:
 {
+    "rating": 3
     "review", "Worthwile watching, run do not walk to see it"
 }
 
