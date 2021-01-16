@@ -20,6 +20,10 @@ public class MovieRatingService {
     public Movie submitMovieRating(String title, String rating){
         Optional<Movie> movie = moviesRepository.findByTitle(title);
         movie.get().getUserRatings().add(Integer.valueOf(rating));
+
+        int avgRating = movie.get().getUserRatings().stream().mapToInt(userRating -> userRating).sum();
+        avgRating = avgRating/movie.get().getUserRatings().size();
+        movie.get().setRating(String.valueOf(avgRating));
         Movie savedMovie = moviesRepository.save(movie.get());
         return savedMovie;
 

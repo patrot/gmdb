@@ -49,4 +49,20 @@ public class MovieRatingServiceTests {
         verify(mockMoviesRepository).findByTitle("The Avengers");
         verify(mockMoviesRepository).save(expectedMovie);
     }
+
+    @Test
+    public void averageMovieRatingTest(){
+        when(mockMoviesRepository.findByTitle("The Avengers")).thenReturn(java.util.Optional.ofNullable(expectedMovie));
+
+        when(mockMoviesRepository.save(expectedMovie)).thenReturn(expectedMovie);
+        Movie movieResult = movieRatingService.submitMovieRating("The Avengers", "3");
+        assertEquals(expectedMovie.getTitle(), movieResult.getTitle());
+        assertEquals(2, movieResult.getUserRatings().size());
+        assertEquals(3, movieResult.getUserRatings().get(movieResult.getUserRatings().size()-1));
+        assertEquals("4", movieResult.getRating());
+
+        verify(mockMoviesRepository).findByTitle("The Avengers");
+        verify(mockMoviesRepository).save(expectedMovie);
+
+    }
 }
