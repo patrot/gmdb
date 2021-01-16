@@ -1,5 +1,6 @@
 package com.galvanize.indus.gmdb.controllers;
 
+import com.galvanize.indus.gmdb.exceptions.GmdbMissingRatingException;
 import com.galvanize.indus.gmdb.models.Movie;
 import com.galvanize.indus.gmdb.models.UserRating;
 import com.galvanize.indus.gmdb.services.MovieRatingService;
@@ -12,10 +13,14 @@ public class MovieRatingController {
     @Autowired
     MovieRatingService movieRatingService;
 
-    @PostMapping("/gmdb/movies/rating/{title}/{rating}")
+    @PostMapping("/gmdb/movies/rating/{title}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Movie submitMovieRating(@PathVariable String title, @PathVariable String rating, @RequestBody UserRating body){
+    public Movie submitMovieRating(@PathVariable String title, @RequestBody UserRating body) throws GmdbMissingRatingException {
 
-        return movieRatingService.submitMovieRating(title, rating, body.getReview());
+        if (body.getRating() == 0) {
+            throw new GmdbMissingRatingException();
+        }
+
+        return movieRatingService.submitMovieRating(title, Integer.toString(body.getRating()), body.getReview());
     }
 }

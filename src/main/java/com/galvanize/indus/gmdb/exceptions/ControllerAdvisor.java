@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
+
     @ExceptionHandler(GmdbException.class)
     public ResponseEntity<Object> handleGmdbException(
             GmdbException ex, WebRequest request) throws JsonProcessingException {
@@ -22,5 +23,17 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         String messageObject = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(incorrectMovie);
 
         return new ResponseEntity<>(messageObject, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(GmdbMissingRatingException.class)
+    public ResponseEntity<Object> handleGmdbMissingRatingException(
+            GmdbMissingRatingException ex, WebRequest request) throws JsonProcessingException {
+
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode missingRating = mapper.createObjectNode();
+        missingRating.put("message", "Star rating is required");
+        String messageObject = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(missingRating);
+
+        return new ResponseEntity<>(messageObject, HttpStatus.NOT_ACCEPTABLE);
     }
 }

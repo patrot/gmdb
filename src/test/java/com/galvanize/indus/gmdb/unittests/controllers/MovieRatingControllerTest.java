@@ -1,5 +1,6 @@
 package com.galvanize.indus.gmdb.unittests.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.galvanize.indus.gmdb.models.Movie;
@@ -61,14 +62,10 @@ public class MovieRatingControllerTest {
         when(movieRatingService.submitMovieRating("The Avengers", "4", "Worthwhile watching, run do not walk to see it")).thenReturn(avengers);
 
         ObjectMapper mapper = new ObjectMapper();
-        ObjectNode contentObject = mapper.createObjectNode();
-        contentObject.put("review", "Worthwhile watching, run do not walk to see it");
+        UserRating userRating = UserRating.builder().rating(4).review("Worthwhile watching, run do not walk to see it").build();
+        String content = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(userRating);
 
-
-        // UserRating userRating = UserRating.builder().rating(4).review("Worthwhile watching, run do not walk to see it").build();
-        String content = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(contentObject);
-
-        mockMvc.perform(post("/gmdb/movies/rating/The Avengers/4")
+        mockMvc.perform(post("/gmdb/movies/rating/The Avengers")
                     .contentType(MediaType.APPLICATION_JSON)
                     .characterEncoding("utf-8")
                     .content(content))
@@ -88,6 +85,27 @@ public class MovieRatingControllerTest {
 
 
         verify(movieRatingService).submitMovieRating("The Avengers", "4", "Worthwhile watching, run do not walk to see it");
+    }
+
+    @Test
+    public void submitMovieRatingTest_reviewWithoutRating() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode contentObject = mapper.createObjectNode();
+        contentObject.put("review", "Worthwhile watching, run do not walk to see it");
+
+
+        // UserRating userRating = UserRating.builder().rating(4).review("Worthwhile watching, run do not walk to see it").build();
+        String content = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(contentObject);
+
+        mockMvc.perform(post("/gmdb/movies/rating/The Avengers")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding("utf-8")
+                    .content(content))
+                    .andExpect(status().isNotAcceptable())
+                .andDo(print())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.message").value("Star rating is required"));
+
     }
 
 }

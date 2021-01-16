@@ -3,6 +3,7 @@ package com.galvanize.indus.gmdb.integrationtests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.galvanize.indus.gmdb.models.UserRating;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
@@ -33,11 +34,10 @@ public class HttpPostRating {
     public void submitMovieRatingTest_firstRating() throws Exception {
 
         ObjectMapper mapper = new ObjectMapper();
-        ObjectNode contentObject = mapper.createObjectNode();
-        contentObject.put("review", "Worthwhile watching, run do not walk to see it");
-        String content = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(contentObject);
+        UserRating userRating = UserRating.builder().rating(4).review("Worthwhile watching, run do not walk to see it").build();
+        String content = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(userRating);
 
-        mockMvc.perform(post("/gmdb/movies/rating/The Avengers/4")
+        mockMvc.perform(post("/gmdb/movies/rating/The Avengers")
                     .contentType(MediaType.APPLICATION_JSON)
                     .characterEncoding("utf-8")
                     .content(content))
@@ -59,12 +59,11 @@ public class HttpPostRating {
     public void submitMovieRatingTest_twoRatings() throws Exception {
 
         ObjectMapper mapper = new ObjectMapper();
-        ObjectNode contentObject = mapper.createObjectNode();
-        contentObject.put("review", "Worthwhile watching, run do not walk to see it");
-        String content = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(contentObject);
+        UserRating userRating = UserRating.builder().rating(3).review("Worthwhile watching, run do not walk to see it").build();
+        String content = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(userRating);
 
 
-        mockMvc.perform(post("/gmdb/movies/rating/The Avengers/3")
+        mockMvc.perform(post("/gmdb/movies/rating/The Avengers")
                     .contentType(MediaType.APPLICATION_JSON)
                     .characterEncoding("utf-8")
                     .content(content))
@@ -80,10 +79,10 @@ public class HttpPostRating {
                 .andExpect(jsonPath("$.userRatings[0].rating").value(3))
                 .andExpect(jsonPath("$.userRatings[0].review").value("Worthwhile watching, run do not walk to see it"));
 
-        contentObject.put("review", "Very poor movie");
-        content = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(contentObject);
+        userRating = UserRating.builder().rating(5).review("Very poor movie").build();
+        content = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(userRating);
 
-        mockMvc.perform(post("/gmdb/movies/rating/The Avengers/5")
+        mockMvc.perform(post("/gmdb/movies/rating/The Avengers")
                     .contentType(MediaType.APPLICATION_JSON)
                     .characterEncoding("utf-8")
                     .content(content))
