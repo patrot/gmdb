@@ -35,8 +35,7 @@ Response:
 ````
 
 GET /gmdb/movies/The Avengers
-````
-Response:
+````Response:
 {
     "title": "The Avengers",
     "director": "Joss Whedon",
@@ -50,6 +49,12 @@ Response:
 
 POST /gmdb/movies/rating/The Avengers/3
 ````
+Request:
+{
+    "review", "Worthwile watching, run do not walk to see it"
+}
+
+
 Response:
 {
     "title": "The Avengers",
@@ -58,7 +63,10 @@ Response:
     "release": "2012",
     "description": "Earths mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity",
     "rating": "4",
-    "userRatings": ["5", "3"],
+    "userRatings": [
+        {"rating": "5", "review": "Awful movie, very childish"},
+        {"rating": "3", "review": "Worthwile watching, run do not walk to see it"}
+    ],
     "id": 1 
 }
 
