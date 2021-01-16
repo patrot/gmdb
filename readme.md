@@ -4,6 +4,7 @@
 | URI | Method | Status| Description |
 |-----|--------|-------|-------------|
 |/gmdb/movies|GET|200|Get list of all movies with details|
+|/gmdb/movies/{title}|GET|200|Get movie based on its title|
 
 ### **Sample Request and Response**
 
@@ -29,4 +30,17 @@ GET /gmdb/movies
     "id": 2
   }
 ]
+````
+
+GET /gmdb/movies/The Avengers
+````
+{
+    "title": "The Avengers",
+    "director": "Joss Whedon",
+    "actors": "Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth",
+    "release": "2012",
+    "description": "Earths mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity",
+    "rating": null,
+    "id": 1 
+}
 ````
