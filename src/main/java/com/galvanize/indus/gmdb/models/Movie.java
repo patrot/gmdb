@@ -25,6 +25,10 @@ public class Movie {
     private String director;
     private String actors;
     private String release;
+
+    @Lob
+    @Column
     private String description;
+
     private String rating;
 }
