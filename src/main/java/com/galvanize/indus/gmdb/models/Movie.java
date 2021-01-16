@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -29,6 +31,9 @@ public class Movie {
     @Lob
     @Column
     private String description;
+
+    @ElementCollection
+    private List<Integer> userRatings;
 
     private String rating;
 }

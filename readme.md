@@ -5,11 +5,13 @@
 |-----|--------|-------|-------------|
 |/gmdb/movies|GET|200|Get list of all movies with details|
 |/gmdb/movies/{title}|GET|200|Get movie based on its title|
+|/gmdb/movies/rating/{title}/{rating}|POST|201|Post rating for existing movie|
 
 ### **Sample Request and Response**
 
 GET /gmdb/movies
 ````
+Response:
 [
   {
     "title": "The Avengers",
@@ -34,6 +36,7 @@ GET /gmdb/movies
 
 GET /gmdb/movies/The Avengers
 ````
+Response:
 {
     "title": "The Avengers",
     "director": "Joss Whedon",
@@ -44,3 +47,19 @@ GET /gmdb/movies/The Avengers
     "id": 1 
 }
 ````
+
+POST /gmdb/movies/rating/The Avengers/4
+````
+Response:
+{
+    "title": "The Avengers",
+    "director": "Joss Whedon",
+    "actors": "Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth",
+    "release": "2012",
+    "description": "Earths mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity",
+    "rating": "4",
+    "userRatings": ["5", "4"],
+    "id": 1 
+}
+
+

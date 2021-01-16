@@ -1,6 +1,7 @@
 package com.galvanize.indus.gmdb.unittests.controllers;
 
 import com.galvanize.indus.gmdb.models.Movie;
+import com.galvanize.indus.gmdb.services.MovieRatingService;
 import com.galvanize.indus.gmdb.services.MoviesService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,9 @@ public class MoviesControllerTests {
 
     @MockBean
     MoviesService mockMoviesService;
+
+    @MockBean
+    MovieRatingService movieRatingService;
 
     private List<Movie> movies;
     private Movie avengers;
