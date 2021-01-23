@@ -6,33 +6,37 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-@Entity
+@Entity(name="Movie")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name= "Movie", uniqueConstraints = @UniqueConstraint(columnNames={"TITLE"}))
-public class Movie {
+@Table(name="movies")
+public class Movie implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id;
+    private long id;
 
-    @Column(name="TITLE")
     private String title;
 
     private String director;
     private String actors;
-    private String release;
+    private String releaseYear;
 
     @Lob
     @Column
     private String description;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+//    @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY,
+//        cascade = CascadeType.ALL)
+    @OneToMany(orphanRemoval = true,
+            cascade = CascadeType.ALL)
     private List<UserRating> userRatings;
 
     private String rating;

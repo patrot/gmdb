@@ -46,7 +46,7 @@ public class MoviesControllerTests {
                 .title("The Avengers")
                 .director("Joss Whedon")
                 .actors("Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth")
-                .release("2012")
+                .releaseYear("2012")
                 .description("Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity.")
                 .build();
 
@@ -98,7 +98,7 @@ public class MoviesControllerTests {
                 .andExpect(jsonPath("$.[0].title").value("The Avengers"))
                 .andExpect(jsonPath("$.[0].director").value("Joss Whedon"))
                 .andExpect(jsonPath("$.[0].actors").value("Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth"))
-                .andExpect(jsonPath("$.[0].release").value("2012"))
+                .andExpect(jsonPath("$.[0].releaseYear").value("2012"))
                 .andExpect(jsonPath("$.[0].description").value("Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity."))
                 .andExpect(jsonPath("$.[0].rating").isEmpty());
 

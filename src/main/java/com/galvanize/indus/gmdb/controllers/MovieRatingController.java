@@ -4,6 +4,7 @@ import com.galvanize.indus.gmdb.exceptions.GmdbMissingRatingException;
 import com.galvanize.indus.gmdb.models.Movie;
 import com.galvanize.indus.gmdb.models.UserRating;
 import com.galvanize.indus.gmdb.services.MovieRatingService;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

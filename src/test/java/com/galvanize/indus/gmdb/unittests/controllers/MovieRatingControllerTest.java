@@ -16,7 +16,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -49,7 +51,7 @@ public class MovieRatingControllerTest {
                 .title("The Avengers")
                 .director("Joss Whedon")
                 .actors("Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth")
-                .release("2012")
+                .releaseYear("2012")
                 .description("Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity.")
                 .rating("4")
                 .userRatings(userRatings)
@@ -75,7 +77,7 @@ public class MovieRatingControllerTest {
                 .andExpect(jsonPath("$.title").value("The Avengers"))
                 .andExpect(jsonPath("$.director").value("Joss Whedon"))
                 .andExpect(jsonPath("$.actors").value("Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth"))
-                .andExpect(jsonPath("$.release").value("2012"))
+                .andExpect(jsonPath("$.releaseYear").value("2012"))
                 .andExpect(jsonPath("$.description").value("Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity."))
                 .andExpect(jsonPath("$.rating").value("4"))
                 .andExpect(jsonPath("$.userRatings[0].rating").value(4))

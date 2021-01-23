@@ -31,7 +31,7 @@ public class MovieRatingServiceTests {
                 .title("The Avengers")
                 .director("Joss Whedon")
                 .actors("Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth")
-                .release("2012")
+                .releaseYear("2012")
                 .description("Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity.")
                 .userRatings(userRatings)
                 .build();

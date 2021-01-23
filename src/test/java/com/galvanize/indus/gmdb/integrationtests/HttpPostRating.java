@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.verify;
@@ -24,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @AutoConfigureDataJpa
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@ActiveProfiles("test")
 public class HttpPostRating {
 
 
@@ -47,7 +49,7 @@ public class HttpPostRating {
                 .andExpect(jsonPath("$.title").value("The Avengers"))
                 .andExpect(jsonPath("$.director").value("Joss Whedon"))
                 .andExpect(jsonPath("$.actors").value("Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth"))
-                .andExpect(jsonPath("$.release").value("2012"))
+                .andExpect(jsonPath("$.releaseYear").value("2012"))
                 .andExpect(jsonPath("$.description").value("Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity."))
                 .andExpect(jsonPath("$.rating").value("4"))
                 .andExpect(jsonPath("$.userRatings[0].rating").value(4))
@@ -73,7 +75,7 @@ public class HttpPostRating {
                 .andExpect(jsonPath("$.title").value("The Avengers"))
                 .andExpect(jsonPath("$.director").value("Joss Whedon"))
                 .andExpect(jsonPath("$.actors").value("Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth"))
-                .andExpect(jsonPath("$.release").value("2012"))
+                .andExpect(jsonPath("$.releaseYear").value("2012"))
                 .andExpect(jsonPath("$.description").value("Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity."))
                 .andExpect(jsonPath("$.rating").value("3"))
                 .andExpect(jsonPath("$.userRatings[0].rating").value(3))
@@ -92,7 +94,7 @@ public class HttpPostRating {
                 .andExpect(jsonPath("$.title").value("The Avengers"))
                 .andExpect(jsonPath("$.director").value("Joss Whedon"))
                 .andExpect(jsonPath("$.actors").value("Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth"))
-                .andExpect(jsonPath("$.release").value("2012"))
+                .andExpect(jsonPath("$.releaseYear").value("2012"))
                 .andExpect(jsonPath("$.description").value("Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity."))
                 .andExpect(jsonPath("$.rating").value("4"))
                 .andExpect(jsonPath("$.userRatings[0].rating").value(3))
