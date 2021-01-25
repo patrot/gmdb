@@ -13,25 +13,31 @@ import java.util.Optional;
 public class MovieRatingService {
 
     MoviesRepository moviesRepository;
+    UserRatingRepository userRatingRepository;
 
-    public MovieRatingService(MoviesRepository moviesRepository) {
+    public MovieRatingService(MoviesRepository moviesRepository, UserRatingRepository userRatingRepository) {
         this.moviesRepository = moviesRepository;
+        this.userRatingRepository = userRatingRepository;
     }
 
 
     public Movie submitMovieRating(String title, String rating, String review){
         Optional<Movie> optionalMovie = moviesRepository.findByTitle(title);
         Movie movie = optionalMovie.get();
-        UserRating newUserRating = UserRating.builder().review(review).rating(Integer.valueOf(rating)).build();
+        UserRating newUserRating = UserRating.builder().review(review).rating(Integer.valueOf(rating)).movie(movie).build();
 
-        movie.getUserRatings().add(newUserRating);
+        UserRating savedUserRating = userRatingRepository.save(newUserRating);
+
+        Optional<Movie> optionalUpdatedMovie = moviesRepository.findByTitle(title);
+        Movie updatedMovie = optionalUpdatedMovie.get();
 
 
-         int avgRating = movie.getUserRatings().stream().mapToInt(
+
+         int avgRating = updatedMovie.getUserRatings().stream().mapToInt(
                  userRating -> userRating.getRating()).sum();
-         avgRating = avgRating/movie.getUserRatings().size();
-        movie.setRating(String.valueOf(avgRating));
-        Movie savedMovie = moviesRepository.save(movie);
+         avgRating = avgRating/updatedMovie.getUserRatings().size();
+        updatedMovie.setRating(String.valueOf(avgRating));
+        Movie savedMovie = moviesRepository.save(updatedMovie);
         return savedMovie;
 
     }

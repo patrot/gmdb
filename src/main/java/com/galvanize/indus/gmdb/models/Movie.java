@@ -33,9 +33,9 @@ public class Movie implements Serializable {
     @Column
     private String description;
 
-//    @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY,
-//        cascade = CascadeType.ALL)
-    @OneToMany(orphanRemoval = true,
+//    @OneToMany(orphanRemoval = true,
+//            cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     private List<UserRating> userRatings;
 

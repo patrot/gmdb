@@ -3,7 +3,9 @@ package com.galvanize.indus.gmdb.unittests.services;
 import com.galvanize.indus.gmdb.models.Movie;
 import com.galvanize.indus.gmdb.models.UserRating;
 import com.galvanize.indus.gmdb.repositories.MoviesRepository;
+import com.galvanize.indus.gmdb.repositories.UserRatingRepository;
 import com.galvanize.indus.gmdb.services.MovieRatingService;
+import org.apache.catalina.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -20,13 +22,17 @@ public class MovieRatingServiceTests {
     private MovieRatingService movieRatingService;
 
     private MoviesRepository mockMoviesRepository;
+    private UserRatingRepository mockUserRatingRepository;
+
+    private List<UserRating> userRatings;
 
     @BeforeEach
     void setup(){
         mockMoviesRepository = mock(MoviesRepository.class);
-        movieRatingService = new MovieRatingService(mockMoviesRepository);
-        List<UserRating> userRatings = new ArrayList<>();
-        userRatings.add(UserRating.builder().rating(5).build());
+        mockUserRatingRepository = mock(UserRatingRepository.class);
+        movieRatingService = new MovieRatingService(mockMoviesRepository, mockUserRatingRepository);
+        userRatings = new ArrayList<>();
+        userRatings.add(UserRating.builder().rating(5).movie(expectedMovie).build());
         expectedMovie = Movie.builder()
                 .title("The Avengers")
                 .director("Joss Whedon")
@@ -40,6 +46,9 @@ public class MovieRatingServiceTests {
     @Test
     public void submitMovieRatingTest(){
         when(mockMoviesRepository.findByTitle("The Avengers")).thenReturn(java.util.Optional.ofNullable(expectedMovie));
+        UserRating newUserRating = UserRating.builder().movie(expectedMovie).review("Poor Movie").rating(4).build();
+        when(mockUserRatingRepository.save(any())).thenReturn(newUserRating);
+        userRatings.add(newUserRating);
 
         when(mockMoviesRepository.save(expectedMovie)).thenReturn(expectedMovie);
         Movie movieResult = movieRatingService.submitMovieRating("The Avengers", "4", "Poor Movie");
@@ -48,13 +57,17 @@ public class MovieRatingServiceTests {
         assertEquals(4, movieResult.getUserRatings().get(movieResult.getUserRatings().size()-1).getRating());
         assertEquals("Poor Movie", movieResult.getUserRatings().get(movieResult.getUserRatings().size()-1).getReview());
 
-        verify(mockMoviesRepository).findByTitle("The Avengers");
+        verify(mockMoviesRepository, times(2)).findByTitle("The Avengers");
         verify(mockMoviesRepository).save(expectedMovie);
+        verify(mockUserRatingRepository).save(any());
     }
 
     @Test
     public void averageMovieRatingTest(){
         when(mockMoviesRepository.findByTitle("The Avengers")).thenReturn(java.util.Optional.ofNullable(expectedMovie));
+        UserRating newUserRating = UserRating.builder().movie(expectedMovie).review("Good movie").rating(3).build();
+        when(mockUserRatingRepository.save(any())).thenReturn(newUserRating);
+        userRatings.add(newUserRating);
 
         when(mockMoviesRepository.save(expectedMovie)).thenReturn(expectedMovie);
         Movie movieResult = movieRatingService.submitMovieRating("The Avengers", "3", "Good movie");
@@ -64,8 +77,9 @@ public class MovieRatingServiceTests {
         assertEquals("Good movie", movieResult.getUserRatings().get(movieResult.getUserRatings().size()-1).getReview());
         assertEquals("4", movieResult.getRating());
 
-        verify(mockMoviesRepository).findByTitle("The Avengers");
+        verify(mockMoviesRepository, times(2)).findByTitle("The Avengers");
         verify(mockMoviesRepository).save(expectedMovie);
+        verify(mockUserRatingRepository).save(any());
 
     }
 }

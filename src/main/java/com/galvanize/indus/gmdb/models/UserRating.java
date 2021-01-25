@@ -1,9 +1,7 @@
 package com.galvanize.indus.gmdb.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -20,9 +18,11 @@ public class UserRating implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-//    @ManyToOne(fetch=FetchType.LAZY, optional=false)
-//    @JoinColumn(name="movie_id", nullable=false)
-//    private Movie movie;
+    @ManyToOne(fetch=FetchType.LAZY, optional=false)
+    @JoinColumn(name="movie_id", nullable=false)
+    @ToString.Exclude
+    @JsonIgnore
+    private Movie movie;
 
     private int rating;
     private String review;
